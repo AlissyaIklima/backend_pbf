@@ -6,7 +6,6 @@ Clone repositori backend ke dalam direktori lokal:
 
 ```bash
 git clone https://github.com/abdau88/eval_pbf_backend.git
-cd eval_pbf_backend
 ```
 
 ### 2. Install Dependensi
