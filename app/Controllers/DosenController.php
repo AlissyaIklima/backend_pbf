@@ -4,84 +4,48 @@ namespace App\Controllers;
 
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use App\Models\DosenModel;
 
 class DosenController extends ResourceController
 {
-    /**
-     * Return an array of resource objects, themselves in array format.
-     *
-     * @return ResponseInterface
-     */
+   protected $modelName = 'App\Models\DosenModel';
+
     public function index()
     {
-        //
+        return $this->respond($this->model->findAll());
     }
 
-    /**
-     * Return the properties of a resource object.
-     *
-     * @param int|string|null $id
-     *
-     * @return ResponseInterface
-     */
     public function show($id = null)
     {
-        //
+        $data = $this->model->find($id);
+        return $data ? $this->respond($data) : $this->failNotFound('Data Dosen tidak ditemukan');
     }
 
-    /**
-     * Return a new resource object, with default properties.
-     *
-     * @return ResponseInterface
-     */
-    public function new()
-    {
-        //
-    }
-
-    /**
-     * Create a new resource object, from "posted" parameters.
-     *
-     * @return ResponseInterface
-     */
     public function create()
     {
-        //
+        $data = $this->request->getJSON(true);
+
+        if ($this->model->insert($data)) {
+            return $this->respondCreated(['message' => 'Data Dosen berhasil ditambahkan']);
+        }
+        return $this->fail($this->model->errors());
     }
 
-    /**
-     * Return the editable properties of a resource object.
-     *
-     * @param int|string|null $id
-     *
-     * @return ResponseInterface
-     */
-    public function edit($id = null)
-    {
-        //
-    }
-
-    /**
-     * Add or update a model resource, from "posted" properties.
-     *
-     * @param int|string|null $id
-     *
-     * @return ResponseInterface
-     */
     public function update($id = null)
     {
-        //
+        $data = $this->request->getJSON();
+
+        if ($this->model->update($id, $data)) {
+            return $this->respond(['message' => 'Data Dosen berhasil diubah']);
+        }
+        return $this->fail($this->model->errors());
     }
 
-    /**
-     * Delete the designated resource object from the model.
-     *
-     * @param int|string|null $id
-     *
-     * @return ResponseInterface
-     */
     public function delete($id = null)
     {
-        //
+        if ($this->model->delete($id)) {
+            return $this->respondDeleted(['message' => 'Data Dosen dihapus']);
+        }
+        return $this->failNotFound('Data Dosen tidak ditemukan');
     }
 }
